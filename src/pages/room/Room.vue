@@ -7,21 +7,33 @@
 		<div class="footer">
 			<textarea placeholder="说点什么..."></textarea>
 		</div>
+
+		<user-modal :user="user"></user-modal>
 	</div>
 </template>
 
 <script>
 import ChatList from './components/ChatList';
+import UserModal from './components/UserModal';
+import Tool from '@/utils/tools';
+
+let socket = IO.connect("ws://127.0.0.1:7000");
 
 export default {
 	data () {
 		return {
-
+			user: {}
 		}
 	},
 
 	components: {
-		ChatList
+		ChatList,
+		UserModal
+	},
+
+	mounted () {
+
+		socket.emit('login', {name:'张三', id: Tool.genUserId()});
 	}
 }
 </script>
