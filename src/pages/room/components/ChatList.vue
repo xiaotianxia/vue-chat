@@ -31,6 +31,12 @@ export default {
 					type: 'user',
 					username: '李四',
 					userId: '2343213',
+					msg: '哦',
+				},
+				{
+					type: 'user',
+					username: '李四',
+					userId: '2343213',
 					msg: '嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿',
 				}
 			]

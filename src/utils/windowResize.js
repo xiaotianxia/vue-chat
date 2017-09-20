@@ -5,5 +5,6 @@ window.onresize = function () {
 
 function windowResize () {
 	console.log(window.screen.width);
-	document.documentElement.style.fontSize = ((window.screen.width / 750) * 100) + 'px';
+    var wWidth = window.screen.width > 750 ? 750 : window.screen.width;
+	document.documentElement.style.fontSize = (wWidth / 750 * 100) + 'px';
 }

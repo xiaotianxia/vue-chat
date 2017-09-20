@@ -2,13 +2,13 @@
 	<div id="room">
 		<div class="header">header</div>
 		<div class="chat">
-			<chat-list></chat-list>
+			<chat-list v-if="!show"></chat-list>
 		</div>
 		<div class="footer">
 			<textarea placeholder="说点什么..."></textarea>
 		</div>
 
-		<user-modal :user="user"></user-modal>
+		<user-modal v-if="show" :userInfo="userInfo" @usernameInput="onUsernameInput"></user-modal>
 	</div>
 </template>
 
@@ -22,7 +22,8 @@ let socket = IO.connect("ws://127.0.0.1:7000");
 export default {
 	data () {
 		return {
-			user: {}
+			userInfo: {},
+			show: true
 		}
 	},
 
@@ -31,9 +32,21 @@ export default {
 		UserModal
 	},
 
-	mounted () {
+	methods: {
+		onUsernameInput (data) {
+			this.userInfo = {
+				name: data.name,
+				userId: Tool.genUserId()
+			};
+			socket.emit('login', this.userInfo);
+			this.show = false;
+		}
+	},
 
-		socket.emit('login', {name:'张三', id: Tool.genUserId()});
+	mounted () {
+		socket.on('login', data => {
+			console.log(data);
+		});
 	}
 }
 </script>

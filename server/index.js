@@ -7,11 +7,10 @@ app.get('/',function (req, res) {
 });
 
 io.on('connection', function (socket) {
-	socket.on('login', function (user) {
-		console.log(user);
+	socket.on('login', function (userInfo) {
         
-        io.emit('login',{id:12345});
-        console.log(user.name + "加入了群聊");
+        io.emit('login', userInfo);
+        console.log(userInfo.name + "加入了群聊");
     })
 })
 
