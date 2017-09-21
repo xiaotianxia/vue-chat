@@ -1,7 +1,7 @@
 <template>
 	<div id="room">
 		<div class="header">
-			<p class="room-name">{{roomName}}</p>
+			<p class="room-name">{{roomName}}({{userCount}})</p>
 			<div class="icon-group" @click="onShowRoomInfo"></div>
 		</div>
 		<div class="chat">
@@ -34,6 +34,7 @@ export default {
 	data () {
 		return {
 			roomName: '群聊',
+			userCount: 0,
 			userInfo: {},
 			chatList: [],
 			modalShow: true,
@@ -77,7 +78,9 @@ export default {
 
 		socket.on('login', data => {
 			console.log(data);
-			this.modalShow = false;
+			if(data.userId == this.userInfo.userId) {
+				this.modalShow = false;
+			}
 			this.onUpdateChatList(data);
 		});
 
@@ -85,6 +88,10 @@ export default {
 			console.log(data);
 			this.onUpdateChatList(data);
 		});
+
+		socket.on('updateUserCount', data => {
+			this.userCount = data.userCount;
+		})
 	}
 }
 </script>
@@ -131,7 +138,7 @@ export default {
 	.chat {
 		position: absolute;
 		top: 2rem;
-		bottom: 4rem;
+		bottom: 5rem;
 		overflow: auto;
 		border-bottom: 1px solid #ccc;
 		background-color: #eee;
@@ -139,6 +146,6 @@ export default {
 	.footer {
 		position: fixed;
 		bottom: 0;
-		height: 4rem;
+		height: 5rem;
 	}
 </style>
