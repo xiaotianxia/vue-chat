@@ -1,10 +1,15 @@
 <template>
-	<ul class="chat-list">
-		<li v-for="item in chatList" class="chat-item" 
-			:class="[(item.type == 'system' &&  !item.userId) ? 'system' : 'user', {'self': item.userId == userInfo.userId, 'other': item.type != 'system' && item.userId != userInfo.userId}]">
-			<div v-if="item.type != 'system'" class="avatar">{{item.username.substr(-1)}}</div>
-			<div class="content">{{item.msg}}</div>
-		</li>
+	<ul class="chat-list js-list">
+		<template v-for="item in chatList">
+			<li v-if="item.type == 'system'" class="chat-item system">
+				<div class="content">{{item.msg}}</div>
+			</li>
+			<li v-else class="chat-item user" 
+				:class="[item.userId == userInfo.userId ? 'self' : 'other']">
+				<div class="avatar" :style="{'background-color': item.avatar}">{{item.name.substr(-1)}}</div>
+				<div class="content">{{item.msg}}</div>
+			</li>
+		</template>
 	</ul>
 </template>
 
@@ -12,34 +17,16 @@
 export default {
 	data () {
 		return {
-			userInfo: {
-				username: '张三',
-				userId: '123456'
-			},
-			chatList: [
-				{
-					type: 'system',
-					msg: '欢迎光临',
-				},
-				{
-					type: 'user',
-					username: '张三',
-					userId: '123456',
-					msg: '哈哈哈哈哈哈哈哈哈或或或哈哈哈哈哈哈或或或哈哈哈哈哈哈或或或哈哈哈哈哈哈或或或哈哈哈哈哈哈或或或哈哈哈哈哈哈或或或哈哈哈哈哈哈或或或哈哈哈哈哈哈或或或哈哈哈哈哈哈或或或哈哈哈哈哈哈或或或哈哈哈哈哈哈或或或或哈哈',
-				},
-				{
-					type: 'user',
-					username: '李四',
-					userId: '2343213',
-					msg: '哦',
-				},
-				{
-					type: 'user',
-					username: '李四',
-					userId: '2343213',
-					msg: '嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿嘿',
-				}
-			]
+			
+		}
+	},
+
+	props: {
+		userInfo: {
+			default: {}
+		},
+		chatList: {
+			default: []
 		}
 	}
 }
@@ -60,8 +47,8 @@ export default {
 				text-align: center;
 				line-height: 1rem;
 				font-size: .5rem;
-				background-color: red;
 				color: #fff;
+				background-color: #000;
 			}
 			.content {
 				position: relative;

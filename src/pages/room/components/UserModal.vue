@@ -4,7 +4,7 @@
             提示      
         </div>
         <div class="content">
-            <input type="text" placeholder="输入昵称" v-model="name">
+            <input type="text" placeholder="输入昵称" v-model="name" @keyup.enter="onSubmit">
         </div>
         <div class="actions">
             <a @click="onSubmit">确定</a>
