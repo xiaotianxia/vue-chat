@@ -28,6 +28,14 @@ export default {
 		chatList: {
 			default: []
 		}
+	},
+
+	watch: {
+		chatList () {
+			let $list = document.querySelector('.js-list');
+			console.log($list.scrollTop);
+			$list.scrollTop = 10000;
+		}
 	}
 }
 </script>

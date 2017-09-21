@@ -17,12 +17,15 @@ export default {
 	},
 
 	props: {
-		
+		userInfo: {
+			default: {}
+		}
 	},
 
 	methods: {
 		onLogout () {
-			socket.disconnect();
+			socket.emit('logout', this.userInfo);
+			this.$emit('hideRoomInfo');
 		}
 	}
 }
@@ -36,7 +39,8 @@ export default {
 		width: 100%;
 		height: 100%;
 		z-index: 10000;
-
+		background-color: #ccc;
+		padding: 1rem;
 		.logout {
 			a {
 				display: block;

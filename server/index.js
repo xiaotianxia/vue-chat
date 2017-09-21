@@ -13,11 +13,14 @@ let LOGIN_USER = {},
 io.on('connection', socket => {
 	socket.on('login', userInfo => {
 		LOGIN_USER = userInfo;
-		USER_LIST.push(userInfo.userId);
+        if(USER_LIST.indexOf(LOGIN_USER.userId) == -1) {
+    		USER_LIST.push(LOGIN_USER.userId);
+        }
 		console.log(USER_LIST);
-        let msg = (userInfo.userId == LOGIN_USER.userId ? '你' :  '“' + userInfo.name + '”') + '加入了群聊',
-        	userMsg = {
-	        	...userInfo,
+        let msg = '“' + userInfo.name + '”'+ '加入了群聊',
+            userMsg = {
+	        	name: userInfo.name,
+                userId: userInfo.userId,
 	        	type: 'system',
 	        	msg: msg
 	        };
@@ -30,11 +33,18 @@ io.on('connection', socket => {
 		io.emit('chat', chatMsg);
 	});
 
-	socket.on('disconnect', () => {
-		USER_LIST.splice(USER_LIST.indexOf(LOGIN_USER.userId), 1);
-		io.emit('updateUserCount', {userCount: USER_LIST.length});
-		console.log(USER_LIST);
-		console.log('退出了群聊');
+	socket.on('logout', (userInfo) => {
+        USER_LIST.splice(USER_LIST.indexOf(userInfo.userId), 1);
+        io.emit('updateUserCount', {userCount: USER_LIST.length});
+        console.log(USER_LIST);
+        let msg = '“' + userInfo.name + '”'+ '退出了群聊',
+            userMsg = {
+                name: userInfo.name,
+                userId: userInfo.userId,
+                type: 'system',
+                msg: msg
+            };
+        io.emit('logout', userMsg);
 	})
 });
 

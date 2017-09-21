@@ -19,7 +19,10 @@
 			@usernameInput="onUsernameInput">
 		</user-modal>
 
-		<room-info v-if="showRoomInfo"></room-info>
+		<room-info v-if="showRoomInfo"
+			@hideRoomInfo="onHideRoomInfo"
+			:userInfo="userInfo">
+		</room-info>
 	</div>
 </template>
 
@@ -66,31 +69,42 @@ export default {
 
 		onShowRoomInfo () {
 			this.showRoomInfo = true;
+		},
+
+		onHideRoomInfo () {
+			this.showRoomInfo = false;
 		}
 	},
 
 	mounted () {
-		// let chatData = localStorage.getItem('chat_user');
-		// if(chatData && chatData != '[object Object]') {
-		// 	this.userInfo = JSON.parse(chatData);
-		// 	socket.emit('login', this.userInfo);
-		// }
+		let chatData = localStorage.getItem('chat_user');
+		if(chatData && chatData != '[object Object]') {
+			this.userInfo = JSON.parse(chatData);
+			socket.emit('login', this.userInfo);
+		}
 
 		socket.on('login', data => {
-			console.log(data);
 			if(data.userId == this.userInfo.userId) {
 				this.modalShow = false;
+				data.msg = '你加入了群聊';
 			}
 			this.onUpdateChatList(data);
 		});
 
 		socket.on('chat', data => {
-			console.log(data);
 			this.onUpdateChatList(data);
 		});
 
 		socket.on('updateUserCount', data => {
 			this.userCount = data.userCount;
+		});
+
+		socket.on('logout', data => {
+			if(data.userId == this.userInfo.userId) {
+				this.modalShow = false;
+				data.msg = '你退出了群聊';
+			}
+			this.onUpdateChatList(data);
 		})
 	}
 }
@@ -98,6 +112,7 @@ export default {
 
 <style lang="less" scoped>
 	#room {
+		height: 100%;
 		padding-top: 1rem;
 	}
 	.header,

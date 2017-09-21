@@ -22,11 +22,15 @@ export default {
 	},
 
 	methods: {
-		onSubmit () {
-			if(this.msg == '') { return; }
+		onSubmit (e) {
+			let msgStr = this.msg.replace('\n', '');
+			if(msgStr == '') {
+				this.msg = '';
+				return; 
+			}
 			let chatMsg = {
 				...this.userInfo,
-				msg: this.msg
+				msg: msgStr
 			};
 			socket.emit('chat', chatMsg);
 			this.msg = '';
