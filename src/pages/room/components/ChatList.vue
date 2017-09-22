@@ -10,6 +10,7 @@
 				<div class="content">{{item.msg}}</div>
 			</li>
 		</template>
+		<li class="toView"></li>
 	</ul>
 </template>
 
@@ -32,9 +33,8 @@ export default {
 
 	watch: {
 		chatList () {
-			let $list = document.querySelector('.js-list');
-			console.log($list.scrollTop);
-			$list.scrollTop = 10000;
+			let $toView = document.querySelector('.toView');
+			$toView.scrollIntoView();
 		}
 	}
 }
@@ -47,6 +47,9 @@ export default {
 			padding: 0 .3rem;
 			font-size: .5rem;
 			overflow: hidden;
+			.toView {
+				margin-top: 1rem;
+			}
 		}
 		.user {
 			.avatar {
