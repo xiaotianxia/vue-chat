@@ -47,9 +47,12 @@ export default {
 			padding: 0 .3rem;
 			font-size: .5rem;
 			overflow: hidden;
-			.toView {
-				margin-top: 1rem;
-			}
+		}
+		.toView {
+			position: relative;
+			top: 1rem;
+			height: .5rem;
+			margin-top: 1rem;
 		}
 		.user {
 			.avatar {
