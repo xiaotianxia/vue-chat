@@ -4,6 +4,11 @@ window.onresize = function () {
 	windowResize();
 
 function windowResize () {
-    var wWidth = window.screen.width > 750 ? 750 : window.screen.width;
-	document.documentElement.style.fontSize = (wWidth / 750 * 100) + 'px';
+    var wWidth = window.screen.width;
+    // var wWidth = document.documentElement.clientWidth;
+    if(wWidth > 750) {
+    	document.documentElement.style.fontSize = '100px';
+    } else {
+		document.documentElement.style.fontSize = (wWidth / 750 * 100) + 'px';
+    }
 }

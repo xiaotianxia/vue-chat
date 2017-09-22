@@ -1,8 +1,9 @@
 <template>
 	<div id="room">
 		<div class="header">
+			<div v-if="showRoomInfo" class="arrow" @click="onBack">←</div>
 			<p class="room-name">{{roomName}}({{userCount}})</p>
-			<div class="icon-group" @click="onShowRoomInfo"></div>
+			<div class="icon-group" @click="onShowRoomInfo">人员</div>
 		</div>
 		<div class="chat">
 			<chat-list v-if="!modalShow"
@@ -18,11 +19,14 @@
 			:userInfo="userInfo" 
 			@usernameInput="onUsernameInput">
 		</user-modal>
-
-		<room-info v-if="showRoomInfo"
-			@hideRoomInfo="onHideRoomInfo"
-			:userInfo="userInfo">
-		</room-info>
+		
+		<transition name="slide">
+			<room-info v-show="showRoomInfo"
+				:roomInfo="roomInfo"
+				@hideRoomInfo="onHideRoomInfo"
+				:userInfo="userInfo">
+			</room-info>
+		</transition>
 	</div>
 </template>
 
@@ -40,6 +44,7 @@ export default {
 			userCount: 0,
 			userInfo: {},
 			chatList: [],
+			roomInfo: {},
 			modalShow: true,
 			showRoomInfo: false
 		}
@@ -57,7 +62,8 @@ export default {
 			this.userInfo = {
 				name: data.name,
 				userId: Tool.genUserId(),
-				avatar: Tool.randomColor()
+				avatar: Tool.randomColor(),
+				roomName: this.roomName
 			};
 			localStorage.setItem('chat_user', JSON.stringify(this.userInfo));
 			socket.emit('login', this.userInfo);
@@ -68,11 +74,16 @@ export default {
 		},
 
 		onShowRoomInfo () {
+			socket.emit('getRoomInfo');
 			this.showRoomInfo = true;
 		},
 
 		onHideRoomInfo () {
 			this.showRoomInfo = false;
+		},
+
+		onBack () {
+			this.onHideRoomInfo();
 		}
 	},
 
@@ -105,7 +116,20 @@ export default {
 				data.msg = '你退出了群聊';
 			}
 			this.onUpdateChatList(data);
-		})
+		});
+
+		socket.on('getRoomInfo', data => {
+			console.log(data);
+			this.roomInfo = data;
+		});
+
+		socket.on('editRoomName', data => {
+			if(data.userId == this.userInfo.userId) {
+				data.msg = '你修改了群名为' + '“' + data.roomName + '"';
+			}
+			this.roomName = data.roomName;
+			this.onUpdateChatList(data);
+		});
 	}
 }
 </script>
@@ -122,7 +146,7 @@ export default {
 		right: 0;
 	}
 	.header {
-		position: fixed;
+		position: absolute;
 		top: 0;
 		height: 2rem;
 		padding-left: .3rem;
@@ -130,6 +154,18 @@ export default {
 		color: #fff;
 		font-size: .6rem;
 		z-index: 99;
+		.arrow {
+			position: absolute;
+			left: .5rem;
+			top: 50%;
+			transform: translate(0, -50%);
+			width: 1rem;
+			height: 1rem;
+			line-height: 1rem;
+			font-weight: bold;
+			text-align: center;
+			font-size: .5rem;
+		}
 		.room-name {
 			width: 50%;
 			height: 100%;
@@ -148,6 +184,10 @@ export default {
 			width: 1rem;
 			height: 1rem;
 			background-color: #fff;
+			font-size: .3rem;
+			line-height: 1rem;
+			text-align: center;
+			color: #000;
 		}
 	}
 	.chat {
@@ -159,7 +199,7 @@ export default {
 		background-color: #eee;
 	}
 	.footer {
-		position: fixed;
+		position: absolute;
 		bottom: 0;
 		height: 5rem;
 	}
