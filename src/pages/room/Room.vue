@@ -119,7 +119,6 @@ export default {
 		});
 
 		socket.on('getRoomInfo', data => {
-			console.log(data);
 			this.roomInfo = data;
 		});
 

@@ -9,10 +9,9 @@
 			</ul>
 		</div>
 		<div class="setings">
-			<input type="text" placeholder="修改群名" 
-				v-model="roomInfo.roomName" 
-				@blur="onSubmit" 
-				@keyup.enter="onSubmit">
+			<label>修改群聊名称</label>
+			<input type="text" placeholder="修改群名" v-model="roomInfo.roomName">
+			<a @click="onSubmit">确定</a>
 		</div>
 		<div class="logout">
 			<a @click="onLogout">退出</a>
@@ -32,6 +31,7 @@ export default {
 		userInfo: {
 			default: {}
 		},
+
 		roomInfo: {
 			default: {}
 		}
@@ -66,8 +66,6 @@ export default {
 		z-index: 10000;
 		background-color: #eee;
 		padding: 1rem;
-		.header {
-		}
 		.members {
 			padding: .3rem;
 			li {
@@ -75,6 +73,7 @@ export default {
 				width: 1.5rem;
 				height: 1.5rem;
 				line-height: 1.5rem;
+				font-size: 1rem;
 				color: #fff; 
 				margin: .2rem .2rem 0 0;
 				text-align: center;
@@ -83,20 +82,41 @@ export default {
 		.setings {
 			margin-top: 1rem;
 			text-align: center;
+            font-size: .5rem;
+			label {
+				font-size: .6rem;
+				color: #aaa;
+			}
 			input {
-                font-size: .5rem;
                 width: 80%;
                 height: 1.5rem;
                 line-height: 1.5rem;
                 border: 0;
                 outline: none;
                 text-align: center;
+                font-size: .5rem;
                 background-color: transparent;
                 border-bottom: 1px solid #aaa;
                 &:focus {
                     border-color: #68cc8b;
                 }
             }
+        	a {
+            	margin-top: 1rem;
+				background-color: green;
+				color: #fff;
+        	}
+		}
+		.setings,
+		.logout {
+			a {
+				display: block;
+				width: 100%;
+				height: 1.5rem;
+				line-height: 1.5rem;
+				text-align: center;
+				font-size: .5rem;
+			}
 		}
 		.logout {
 			position: absolute;
@@ -105,15 +125,8 @@ export default {
 			right: 1rem;
 			padding: .2rem 0;
 			a {
-				display: block;
-				margin: 0 auto;
-				width: 100%;
-				height: 1.5rem;
-				line-height: 1.5rem;
-				text-align: center;
 				background-color: red;
 				color: #fff;
-				font-size: .5rem;
 			}
 		}
 	}
